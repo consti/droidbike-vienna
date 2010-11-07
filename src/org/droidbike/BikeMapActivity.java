@@ -1,9 +1,16 @@
 package org.droidbike;
 
 import android.app.AlertDialog;
-import android.content.*;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,6 +27,8 @@ public class BikeMapActivity extends MapActivity {
     private BikeMapOverlay rentLocationsOverlay;
     private MyLocationOverlay myLocationOverlay;
     private AlertDialog alertDialog;
+    private LocationManager locationManager;
+    private Location currentLocation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,6 +53,28 @@ public class BikeMapActivity extends MapActivity {
 
         mapView.getOverlays().add(myLocationOverlay);
         mapView.getOverlays().add(rentLocationsOverlay);
+
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        LocationListener locationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                if (LocationHelper.isBetterLocation(location, currentLocation)) {
+                    currentLocation = location;
+                    Log.e("DB1","location: "+location);
+                }
+            }
+
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
+
+            public void onProviderEnabled(String provider) {
+            }
+
+            public void onProviderDisabled(String provider) {
+            }
+        };
+
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
     }
 
     @Override

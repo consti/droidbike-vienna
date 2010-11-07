@@ -1,15 +1,13 @@
 package org.droidbike;
 
 import android.util.Log;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,10 +20,10 @@ public class DataParser {
         factory.setValidating(false);
     }
 
-    private static Document getDocument(String data) {
+    private static Document getDocument(InputStream data) {
         Document doc = null;
         try {
-            doc = factory.newDocumentBuilder().parse(data);
+            doc = factory.newDocumentBuilder().parse(data, "UTF-8");
         } catch (ParserConfigurationException e) {
             Log.e("DataParser", "error parsing XML document: " + e.getMessage());
         } catch (SAXException e) {
@@ -36,7 +34,7 @@ public class DataParser {
         return doc;
     }
 
-    public static List<RentShopLocation> parseData(String xmlData) {
+    public static List<RentShopLocation> parseData(InputStream xmlData) {
 
         List<RentShopLocation> list = new ArrayList<RentShopLocation>();
         Document doc = getDocument(xmlData);
@@ -45,35 +43,40 @@ public class DataParser {
         for (int i = 0; i < rootnodes.getLength(); i++) {
             Node node = rootnodes.item(i);
             RentShopLocation location = new RentShopLocation();
-//            System.out.println(node.getNodeName());
 
             NodeList subNodes = node.getChildNodes();
             for (int j = 0; j < subNodes.getLength(); j++) {
-                Node subNode = subNodes.item(j);
-                String ln = subNode.getNodeName();
-//                System.out.println("   " + ln);
-                if ("id".equals(ln)) {
-                    location.id = Integer.valueOf(subNode.getTextContent());
-                } else if ("internal_id".equals(ln)) {
-                    location.internalId = Integer.valueOf(subNode.getTextContent());
-                } else if ("name".equals(ln)) {
-                    location.name = subNode.getTextContent();
-                } else if ("boxes".equals(ln)) {
-                    location.boxes = Integer.valueOf(subNode.getTextContent());
-                } else if ("free_boxes".equals(ln)) {
-                    location.freeBoxes = Integer.valueOf(subNode.getTextContent());
-                } else if ("free_bikes".equals(ln)) {
-                    location.freeBikes = Integer.valueOf(subNode.getTextContent());
-                } else if ("status".equals(ln)) {
-                    location.active = subNode.getTextContent().equals("aktiv");
-                } else if ("description".equals(ln)) {
-                    location.description = subNode.getTextContent();
-                } else if ("latitude".equals(ln)) {
-                    location.latitude = Float.valueOf(subNode.getTextContent());
-                } else if ("longitude".equals(ln)) {
-                    location.longitude = Float.valueOf(subNode.getTextContent());
+                if (subNodes.item(j) instanceof Element) {
+                    Element subNode = (Element) subNodes.item(j);
+                    String ln = subNode.getNodeName();
+                    Text textChild = (Text) subNode.getFirstChild();
+                    String text = textChild != null ? textChild.getData() : "";
+
+                    Log.e("DB1:parsing", "    " + ln + "=" + text + "|");
+                    if ("id".equals(ln)) {
+                        location.id = Integer.valueOf(text);
+                    } else if ("internal_id".equals(ln)) {
+                        location.internalId = Integer.valueOf(text);
+                    } else if ("name".equals(ln)) {
+                        location.name = text;
+                    } else if ("boxes".equals(ln)) {
+                        location.boxes = Integer.valueOf(text);
+                    } else if ("free_boxes".equals(ln)) {
+                        location.freeBoxes = Integer.valueOf(text);
+                    } else if ("free_bikes".equals(ln)) {
+                        location.freeBikes = Integer.valueOf(text);
+                    } else if ("status".equals(ln)) {
+                        location.active = "aktiv".equals(text);
+                    } else if ("description".equals(ln)) {
+                        location.description = text;
+                    } else if ("latitude".equals(ln)) {
+                        location.latitude = Float.valueOf(text);
+                    } else if ("longitude".equals(ln)) {
+                        location.longitude = Float.valueOf(text);
+                    }
                 }
             }
+            Log.e("DB1","location: "+location);
             list.add(location);
         }
 

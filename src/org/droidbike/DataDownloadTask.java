@@ -1,8 +1,15 @@
 package org.droidbike;
 
-import android.app.Activity;
 import android.os.AsyncTask;
+import android.util.Log;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 public class DataDownloadTask extends AsyncTask<Void, Void, List<RentShopLocation>> {
@@ -15,6 +22,24 @@ public class DataDownloadTask extends AsyncTask<Void, Void, List<RentShopLocatio
 
     @Override
     protected List<RentShopLocation> doInBackground(Void... voids) {
+
+        Log.e("DB1","GET requested");
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpGet httpget = new HttpGet("http://dynamisch.citybikewien.at/citybike_xml.php");
+        HttpResponse response = null;
+
+        try {
+            response = httpclient.execute(httpget);
+            HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                InputStream instream = entity.getContent();
+                Log.e("DB1","GET done");
+
+                return DataParser.parseData(instream);
+            }
+        } catch (IOException e) {
+            Log.e("DB1:DataDownloadTask", e.getMessage());
+        }
         return null;
     }
 
@@ -25,6 +50,7 @@ public class DataDownloadTask extends AsyncTask<Void, Void, List<RentShopLocatio
 
     @Override
     protected void onPostExecute(List<RentShopLocation> locations) {
+        Log.e("DB1","updating..");
 
         parent.updateLocationOverlays(locations);
     }
