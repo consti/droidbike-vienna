@@ -1,6 +1,15 @@
-** SOURCE OF CITYBIKE DATA **
-  http://dynamisch.citybikewien.at/citybike_xml.php
+== DroidBike Vienna ==
 
+DroidBike Vienna is a quick two day project that was built at the
+GTUG Munich Bootcamp 2010, right before Google Developer Day 2010 in Munich.
 
-** LICENSE AGREEMENT / TERMS OF USE OF DATA **
-  http://www.citybikewien.at/cms/dynimages/mb/files/Terms_of_Use_XML.pdf
+The first version of the app is created by:
+  * Peter Knego http://github.com/PeterKnego
+  * Sergii http://github.com/rcknr
+  * Constantin Hofstetter http://github.com/consti
+  
+We get our data from the CityBike project through:
+http://dynamisch.citybikewien.at/citybike_xml.php
+
+We comply to the Terms of Use of CityBike Vienna:
+http://www.citybikewien.at/cms/dynimages/mb/files/Terms_of_Use_XML.pdf
