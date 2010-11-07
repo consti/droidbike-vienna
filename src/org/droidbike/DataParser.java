@@ -22,7 +22,7 @@ public class DataParser {
         factory.setValidating(false);
     }
 
-    private static Document getDocument(File data) {
+    private static Document getDocument(String data) {
         Document doc = null;
         try {
             doc = factory.newDocumentBuilder().parse(data);
@@ -36,22 +36,22 @@ public class DataParser {
         return doc;
     }
 
-    public static List<RentShopLocation> parseData(File xmlData) {
+    public static List<RentShopLocation> parseData(String xmlData) {
 
         List<RentShopLocation> list = new ArrayList<RentShopLocation>();
         Document doc = getDocument(xmlData);
 
-        NodeList rootnodes = doc.getDocumentElement().getElementsByTagName("stations");
-        NodeList nodeList = rootnodes.item(0).getChildNodes();
-
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Node node = nodeList.item(i);
+        NodeList rootnodes = doc.getElementsByTagName("station");
+        for (int i = 0; i < rootnodes.getLength(); i++) {
+            Node node = rootnodes.item(i);
             RentShopLocation location = new RentShopLocation();
+//            System.out.println(node.getNodeName());
 
             NodeList subNodes = node.getChildNodes();
             for (int j = 0; j < subNodes.getLength(); j++) {
-                Node subNode = nodeList.item(i);
-                String ln = subNode.getLocalName();
+                Node subNode = subNodes.item(j);
+                String ln = subNode.getNodeName();
+//                System.out.println("   " + ln);
                 if ("id".equals(ln)) {
                     location.id = Integer.valueOf(subNode.getTextContent());
                 } else if ("internal_id".equals(ln)) {
@@ -73,31 +73,17 @@ public class DataParser {
                 } else if ("longitude".equals(ln)) {
                     location.longitude = Float.valueOf(subNode.getTextContent());
                 }
-
-
-//                 <id>2005</id>
-//<internal_id>1087</internal_id>
-//<name>Millenium Tower</name>
-//<boxes>35</boxes>
-//<free_boxes>9</free_boxes>
-//<free_bikes>24</free_bikes>
-//<status>aktiv</status>
-//−
-//<description>
-//Am Maria Restituta Platz zwischen Rivergate und Schnellbahn
-//</description>
-//<latitude>48.24167413865949</latitude>
-//<longitude>16.384670734405518</longitude>
             }
+            list.add(location);
         }
 
         return list;
     }
 
-    public static void main(String[] args) {
-          parseData(new File("./citybike.xml"));
-
-    }
+//    public static void main(String[] args) {
+//        parseData(new File("./citybike.xml"));
+//
+//    }
 
 
 }
