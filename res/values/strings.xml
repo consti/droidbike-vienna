@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DroidBike</string>
+    <string name="menu_quit">Quit</string>
+    <string name="menu_refresh">Refresh</string>
+    <string name="do_nothing_button">Do nothing</string>
+
+</resources>
