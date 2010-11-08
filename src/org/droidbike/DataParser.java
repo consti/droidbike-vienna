@@ -52,7 +52,6 @@ public class DataParser {
                     Text textChild = (Text) subNode.getFirstChild();
                     String text = textChild != null ? textChild.getData() : "";
 
-                    Log.e("DB1:parsing", "    " + ln + "=" + text + "|");
                     if ("id".equals(ln)) {
                         location.id = Integer.valueOf(text);
                     } else if ("internal_id".equals(ln)) {
@@ -76,7 +75,6 @@ public class DataParser {
                     }
                 }
             }
-            Log.e("DB1","location: "+location);
             list.add(location);
         }
 

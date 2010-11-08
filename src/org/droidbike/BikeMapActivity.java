@@ -10,10 +10,10 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
@@ -29,6 +29,8 @@ public class BikeMapActivity extends MapActivity {
     private AlertDialog alertDialog;
     private LocationManager locationManager;
     private Location currentLocation;
+
+    GeoPoint viennaLocation = new GeoPoint(48209206, 16372778);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,8 @@ public class BikeMapActivity extends MapActivity {
         myLocationOverlay.enableMyLocation();
         myLocationOverlay.runOnFirstFix(new Runnable() {
             public void run() {
-                mapView.getController().animateTo(myLocationOverlay.getMyLocation());
+//                mapView.getController().animateTo(myLocationOverlay.getMyLocation());
+                mapView.getController().animateTo(viennaLocation);
                 mapView.getController().setZoom(12);
             }
         });
@@ -59,7 +62,6 @@ public class BikeMapActivity extends MapActivity {
             public void onLocationChanged(Location location) {
                 if (LocationHelper.isBetterLocation(location, currentLocation)) {
                     currentLocation = location;
-                    Log.e("DB1","location: "+location);
                 }
             }
 
@@ -73,7 +75,7 @@ public class BikeMapActivity extends MapActivity {
             }
         };
 
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
     }
 
@@ -92,7 +94,7 @@ public class BikeMapActivity extends MapActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(newLocationsReceiver);
+//        unregisterReceiver(newLocationsReceiver);
     }
 
     @Override

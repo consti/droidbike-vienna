@@ -3,6 +3,7 @@ package org.droidbike;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.widget.Toast;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
@@ -63,7 +64,7 @@ public class BikeMapOverlay extends ItemizedOverlay {
 //        dialog.setMessage(item.getSnippet());
 //        dialog.show();
 
-        toast = Toast.makeText(context, item.getTitle(), Toast.LENGTH_SHORT);
+        toast = Toast.makeText(context, item.getTitle()+"\n "+item.getSnippet(), Toast.LENGTH_SHORT);
         toast.show();
 
         return true;
@@ -75,7 +76,11 @@ public class BikeMapOverlay extends ItemizedOverlay {
             int lon = (int) Math.round(location.longitude * 1E6);
             int lat = (int) Math.round(location.latitude * 1E6);
             String description = location.description;
-            locations.add(new OverlayItem(new GeoPoint(lat, lon), description, "second string"));
+            OverlayItem overlayItem = new OverlayItem(new GeoPoint(lat, lon), description,
+                    "bikes available: " + location.freeBikes + "  boxes free: " + location.freeBoxes);
+
+            locations.add(overlayItem);
+            Log.w("BikeMap", "new location: lat=" + lat + " lon=" + lon);
         }
         populate();
     }

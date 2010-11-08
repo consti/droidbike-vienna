@@ -33,22 +33,28 @@ public class DataDownloadTask extends AsyncTask<Void, Void, List<RentShopLocatio
             if (entity != null) {
                 InputStream instream = entity.getContent();
 
-                return SaxParser.parseXmlFile(instream);
+                return DataParser.parseData(instream);
             }
+            Log.e("DataDownloadTask", "no reply from 'citybike_xml.php'");
+
         } catch (IOException e) {
-            Log.e("DataDownloadTask", e.getMessage());
+            Log.e("DataDownloadTask", "IOException: "+e.getMessage());
         }
         return null;
     }
 
     @Override
     protected void onPreExecute() {
-        super.onPreExecute();
+        Log.e("DataDownloadTask", "update locations started");
     }
 
     @Override
     protected void onPostExecute(List<RentShopLocation> locations) {
-        Log.e("DB1", "updating..");
+
+        if(locations == null){
+            Log.e("DataDownloadTask", "no locations retrieved");
+            return;
+        }
 
         parent.updateLocationOverlays(locations);
     }

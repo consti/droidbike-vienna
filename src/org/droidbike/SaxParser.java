@@ -19,27 +19,30 @@ public class SaxParser {
 
     public static List<RentShopLocation> parseXmlFile(InputStream stream) {
         try {
-             LocationsHandler handler = new LocationsHandler();
+            XmlHandler handler = new XmlHandler();
 
             // Create a builder factory
             SAXParserFactory factory = SAXParserFactory.newInstance();
             factory.setValidating(false);
             factory.setNamespaceAware(false);
+            Log.e("SaxParser", "parser created'");
 
             // Create the builder and parse the file
             factory.newSAXParser().parse(stream, handler);
+            Log.e("SaxParser", "parsing finished'");
+
             return handler.getLocations();
         } catch (SAXException e) {
-            Log.e("SaxParser", e.getMessage());
+            Log.e("SaxParser", "SAXException: " + e.getMessage());
         } catch (ParserConfigurationException e) {
-            Log.e("SaxParser", e.getMessage());
+            Log.e("SaxParser", "ParserConfigurationException: " + e.getMessage());
         } catch (IOException e) {
-            Log.e("SaxParser", e.getMessage());
+            Log.e("SaxParser", "IOException: " + e.getMessage());
         }
         return null;
     }
 
-    static class LocationsHandler extends DefaultHandler {
+    static class XmlHandler extends DefaultHandler {
 
         private static List<String> validSubElementNames = Arrays.asList("id", "internal_id", "name", "boxes",
                 "free_boxes", "free_bikes", "status", "description", "latitude", "longitude");
@@ -47,6 +50,10 @@ public class SaxParser {
         List<RentShopLocation> locations = new ArrayList<RentShopLocation>(100);
         RentShopLocation currentLocation;
         String currentElementName;
+//
+        XmlHandler() {
+            Log.w("XmlHandler", "handler created");
+        }
 
         public List<RentShopLocation> getLocations() {
             return locations;
@@ -55,6 +62,7 @@ public class SaxParser {
         @Override
         public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
             if ("station".equals(qName)) {
+                Log.w("XmlHandler", "start element 'station'");
                 currentLocation = new RentShopLocation();
             }
 
@@ -66,8 +74,10 @@ public class SaxParser {
         @Override
         public void endElement(String uri, String localName, String qName) throws SAXException {
             if ("station".equals(qName)) {
+                Log.w("XmlHandler", "end element 'station'");
                 if (currentLocation != null && locations != null) {
                     locations.add(currentLocation);
+                    Log.w("XmlHandler", "new loc added: lat=" + currentLocation.latitude + " lon=" + currentLocation.longitude);
                     currentLocation = null;
                 }
             }
@@ -107,13 +117,13 @@ public class SaxParser {
 
         @Override
         public void error(SAXParseException e) throws SAXException {
-            Log.e("SaxParser", e.getMessage());
+            Log.e("XmlHandler", "SAXParseException: " + e.getMessage());
             locations = null;
         }
 
         @Override
         public void fatalError(SAXParseException e) throws SAXException {
-            Log.e("SaxParser", e.getMessage());
+            Log.e("XmlHandler", "SAXParseException: " + e.getMessage());
             locations = null;
         }
     }
