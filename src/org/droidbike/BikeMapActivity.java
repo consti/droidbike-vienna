@@ -38,7 +38,7 @@ public class BikeMapActivity extends MapActivity {
         mapView = (MapView) findViewById(R.id.mapview);
         mapView.setBuiltInZoomControls(true);
 
-        rentLocationMarker = this.getResources().getDrawable(R.drawable.danger);
+        rentLocationMarker = this.getResources().getDrawable(R.drawable.bikes_true_freespace_true);
         rentLocationsOverlay = new BikeMapOverlay(rentLocationMarker, this);
 
         myLocationOverlay = new MyLocationOverlay(this, mapView);

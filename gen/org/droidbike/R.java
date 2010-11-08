@@ -11,10 +11,15 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static final int danger=0x7f020000;
-        public static final int droidbike_icon=0x7f020001;
-        public static final int ic_menu_close_clear_cancel=0x7f020002;
-        public static final int ic_menu_rotate=0x7f020003;
+        public static final int bikes_false_freespace_true=0x7f020000;
+        public static final int bikes_true_freespace_false=0x7f020001;
+        public static final int bikes_true_freespace_true=0x7f020002;
+        public static final int danger=0x7f020003;
+        public static final int droidbike_icon=0x7f020004;
+        public static final int ic_menu_close_clear_cancel=0x7f020005;
+        public static final int ic_menu_rotate=0x7f020006;
+        public static final int station_disabled=0x7f020007;
+        public static final int status_not_known=0x7f020008;
     }
     public static final class id {
         public static final int mapview=0x7f060000;
