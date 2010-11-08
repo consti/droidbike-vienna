@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -23,8 +22,9 @@ import java.util.List;
 public class BikeMapActivity extends MapActivity {
 
     private MapView mapView;
-    private Drawable rentLocationMarker;
-    private BikeMapOverlay rentLocationsOverlay;
+    private BikesTrueSpaceTrueOverlay bikesTrueSpaceTrueOverlay;
+    private BikesFalseSpaceTrueOverlay bikesFalseSpaceTrueOverlay;
+    private BikesTrueSpaceFalseOverlay bikesTrueSpaceFalseOverlay;
     private MyLocationOverlay myLocationOverlay;
     private AlertDialog alertDialog;
     private LocationManager locationManager;
@@ -40,8 +40,9 @@ public class BikeMapActivity extends MapActivity {
         mapView = (MapView) findViewById(R.id.mapview);
         mapView.setBuiltInZoomControls(true);
 
-        rentLocationMarker = this.getResources().getDrawable(R.drawable.bikes_true_freespace_true);
-        rentLocationsOverlay = new BikeMapOverlay(rentLocationMarker, this);
+        bikesTrueSpaceTrueOverlay = new BikesTrueSpaceTrueOverlay(this.getResources().getDrawable(R.drawable.bikes_true_freespace_true), this);
+        bikesFalseSpaceTrueOverlay = new BikesFalseSpaceTrueOverlay(this.getResources().getDrawable(R.drawable.bikes_false_freespace_true), this);
+        bikesTrueSpaceFalseOverlay = new BikesTrueSpaceFalseOverlay(this.getResources().getDrawable(R.drawable.bikes_true_freespace_false), this);
 
         myLocationOverlay = new MyLocationOverlay(this, mapView);
         myLocationOverlay.enableCompass();
@@ -55,7 +56,9 @@ public class BikeMapActivity extends MapActivity {
         });
 
         mapView.getOverlays().add(myLocationOverlay);
-        mapView.getOverlays().add(rentLocationsOverlay);
+        mapView.getOverlays().add(bikesTrueSpaceTrueOverlay);
+        mapView.getOverlays().add(bikesFalseSpaceTrueOverlay);
+        mapView.getOverlays().add(bikesTrueSpaceFalseOverlay);
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         LocationListener locationListener = new LocationListener() {
@@ -119,7 +122,9 @@ public class BikeMapActivity extends MapActivity {
     }
 
     public void updateLocationOverlays(List<RentShopLocation> rentShopLocations) {
-        rentLocationsOverlay.updateRentShopLocations(rentShopLocations);
+        bikesTrueSpaceTrueOverlay.updateRentShopLocations(rentShopLocations);
+        bikesTrueSpaceFalseOverlay.updateRentShopLocations(rentShopLocations);
+        bikesFalseSpaceTrueOverlay.updateRentShopLocations(rentShopLocations);
     }
 
 
