@@ -14,8 +14,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
+import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
+import android.view.MotionEvent;
 
 import java.util.List;
 
@@ -35,7 +37,7 @@ public class BikeMapActivity extends MapActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.bike_map);
+        setContentView(R.layout.maptab);
 
         mapView = (MapView) findViewById(R.id.mapview);
         mapView.setBuiltInZoomControls(true);
@@ -165,4 +167,5 @@ public class BikeMapActivity extends MapActivity {
         Intent gpsOptionsIntent = new Intent(settingsIntentString);
         startActivity(gpsOptionsIntent);
     }
+
 }

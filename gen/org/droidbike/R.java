@@ -18,21 +18,32 @@ public final class R {
         public static final int droidbike_icon=0x7f020004;
         public static final int ic_menu_close_clear_cancel=0x7f020005;
         public static final int ic_menu_rotate=0x7f020006;
-        public static final int station_disabled=0x7f020007;
-        public static final int status_not_known=0x7f020008;
+        public static final int icon=0x7f020007;
+        public static final int station_disabled=0x7f020008;
+        public static final int status_not_known=0x7f020009;
     }
     public static final class id {
-        public static final int mapview=0x7f060000;
-        public static final int quit=0x7f060001;
-        public static final int refresh=0x7f060002;
+        public static final int LinearLayout01=0x7f060001;
+        public static final int ListView01=0x7f060002;
+        public static final int emptylayout1=0x7f060005;
+        public static final int maptablayout=0x7f060003;
+        public static final int mapview=0x7f060004;
+        public static final int mapview_old=0x7f060000;
+        public static final int quit=0x7f060007;
+        public static final int refresh=0x7f060008;
+        public static final int textview2=0x7f060006;
     }
     public static final class layout {
         public static final int bike_map=0x7f030000;
+        public static final int listtab=0x7f030001;
+        public static final int maptab=0x7f030002;
+        public static final int tabs=0x7f030003;
     }
     public static final class menu {
         public static final int app_menu=0x7f050000;
     }
     public static final class string {
+        public static final int BikeTabs=0x7f040004;
         public static final int app_name=0x7f040000;
         public static final int do_nothing_button=0x7f040003;
         public static final int menu_quit=0x7f040001;
