@@ -4,6 +4,7 @@ import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.TabHost;
 
@@ -13,6 +14,9 @@ public class BikeTabs extends TabActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Remove activity name from title bar
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.tabs);
         mTabHost = getTabHost();
         TabHost.TabSpec tabSpec = mTabHost.newTabSpec("tab_test1");
