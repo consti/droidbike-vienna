@@ -57,5 +57,6 @@ public class DataDownloadTask extends AsyncTask<Void, Void, List<RentShopLocatio
         }
 
         parent.updateLocationOverlays(locations);
+        //stationsOverlay.updateRentShopLocations(locations);
     }
 }

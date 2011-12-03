@@ -14,19 +14,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
-import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
-import android.view.MotionEvent;
 
 import java.util.List;
 
 public class BikeMapActivity extends MapActivity {
 
     private MapView mapView;
-    private BikesTrueSpaceTrueOverlay bikesTrueSpaceTrueOverlay;
-    private BikesFalseSpaceTrueOverlay bikesFalseSpaceTrueOverlay;
-    private BikesTrueSpaceFalseOverlay bikesTrueSpaceFalseOverlay;
+    private StationsOverlay stationsOverlay;
+    //private BikesFalseSpaceTrueOverlay bikesFalseSpaceTrueOverlay;
+    //private BikesTrueSpaceFalseOverlay bikesTrueSpaceFalseOverlay;
     private MyLocationOverlay myLocationOverlay;
     private AlertDialog alertDialog;
     private LocationManager locationManager;
@@ -39,12 +37,14 @@ public class BikeMapActivity extends MapActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.maptab);
 
+
+
         mapView = (MapView) findViewById(R.id.mapview);
         mapView.setBuiltInZoomControls(true);
 
-        bikesTrueSpaceTrueOverlay = new BikesTrueSpaceTrueOverlay(this.getResources().getDrawable(R.drawable.bikes_true_freespace_true), this);
-        bikesFalseSpaceTrueOverlay = new BikesFalseSpaceTrueOverlay(this.getResources().getDrawable(R.drawable.bikes_false_freespace_true), this);
-        bikesTrueSpaceFalseOverlay = new BikesTrueSpaceFalseOverlay(this.getResources().getDrawable(R.drawable.bikes_true_freespace_false), this);
+        requestNewData();
+
+        stationsOverlay = new StationsOverlay(this);
 
         myLocationOverlay = new MyLocationOverlay(this, mapView);
         myLocationOverlay.enableCompass();
@@ -53,14 +53,14 @@ public class BikeMapActivity extends MapActivity {
             public void run() {
 //                mapView.getController().animateTo(myLocationOverlay.getMyLocation());
                 mapView.getController().animateTo(viennaLocation);
-                mapView.getController().setZoom(12);
+                mapView.getController().setZoom(13);
             }
         });
 
         mapView.getOverlays().add(myLocationOverlay);
-        mapView.getOverlays().add(bikesTrueSpaceTrueOverlay);
-        mapView.getOverlays().add(bikesFalseSpaceTrueOverlay);
-        mapView.getOverlays().add(bikesTrueSpaceFalseOverlay);
+        mapView.getOverlays().add(stationsOverlay);
+        // Meant to refresh the map but it's not happening
+        mapView.postInvalidate();
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         LocationListener locationListener = new LocationListener() {
@@ -124,9 +124,7 @@ public class BikeMapActivity extends MapActivity {
     }
 
     public void updateLocationOverlays(List<RentShopLocation> rentShopLocations) {
-        bikesTrueSpaceTrueOverlay.updateRentShopLocations(rentShopLocations);
-        bikesTrueSpaceFalseOverlay.updateRentShopLocations(rentShopLocations);
-        bikesFalseSpaceTrueOverlay.updateRentShopLocations(rentShopLocations);
+        stationsOverlay.updateRentShopLocations(rentShopLocations);
     }
 
 
@@ -167,5 +165,4 @@ public class BikeMapActivity extends MapActivity {
         Intent gpsOptionsIntent = new Intent(settingsIntentString);
         startActivity(gpsOptionsIntent);
     }
-
 }
